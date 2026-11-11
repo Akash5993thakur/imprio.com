@@ -1,16 +1,21 @@
 ---
 import { siteConfig } from '../config/site.config';
+const src = siteConfig.contact.mapEmbedUrl;
 ---
 
-<div class="map">
-  <iframe
-    src={siteConfig.contact.mapEmbedUrl}
-    title={`Map showing the location of ${siteConfig.businessName}`}
-    loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade"
-    allowfullscreen
-  ></iframe>
-</div>
+{
+  src && (
+    <div class="map">
+      <iframe
+        src={src}
+        title={`Map showing the location of ${siteConfig.businessName}`}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      />
+    </div>
+  )
+}
 
 <style>
   .map {

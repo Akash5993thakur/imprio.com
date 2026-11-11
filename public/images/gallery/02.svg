@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
-  <rect width="800" height="800" fill="#f5e6c4"/>
-  <circle cx="680" cy="120" r="240" fill="#e0a23a" opacity=".15"/>
-  <circle cx="80" cy="720" r="176" fill="#b4532a" opacity=".08"/>
-  <circle cx="171.2" cy="440" r="114.4" fill="#e0a23a"/><circle cx="171.2" cy="440" r="45.76" fill="#f5e6c4"/><circle cx="400" cy="440" r="114.4" fill="#e0a23a"/><circle cx="400" cy="440" r="45.76" fill="#f5e6c4"/><circle cx="628.8" cy="440" r="114.4" fill="#e0a23a"/><circle cx="628.8" cy="440" r="45.76" fill="#f5e6c4"/>
-  <text x="400" y="736" text-anchor="middle" font-family="system-ui,sans-serif" font-size="36" fill="#2f2a26" opacity=".7">Placeholder · gallery/02.svg</text>
-</svg>

@@ -1,22 +1,18 @@
 ---
 import { siteConfig } from '../config/site.config';
-import { samePath, telLink } from '../lib/utils';
+import { linkAttrs, samePath } from '../lib/utils';
 import Icon from './Icon.astro';
 
 const current = Astro.url.pathname;
+const { logo, headerCta } = siteConfig;
+const cta = headerCta ? linkAttrs(headerCta) : undefined;
 ---
 
 <header class="site-header">
   <div class="container site-header__inner">
     <a href="/" class="brand" aria-label={`${siteConfig.businessName} — home`}>
-      <img
-        src={siteConfig.logo.src}
-        alt=""
-        width={siteConfig.logo.width ?? 40}
-        height={siteConfig.logo.height ?? 40}
-        class="brand__logo"
-      />
-      <span class="brand__name">{siteConfig.businessName}</span>
+      <img src={logo.src} alt="" width={logo.width ?? 40} height={logo.height ?? 40} class="brand__logo" />
+      {siteConfig.showNameWithLogo && <span class="brand__name">{siteConfig.businessName}</span>}
     </a>
 
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -26,7 +22,7 @@ const current = Astro.url.pathname;
     </button>
 
     <nav id="site-nav" class="site-nav" aria-label="Main">
-      <ul>
+      <ul class="list-reset">
         {
           siteConfig.navigation.map((item) => (
             <li>
@@ -37,10 +33,14 @@ const current = Astro.url.pathname;
           ))
         }
       </ul>
-      <a class="btn btn--primary site-nav__call" href={telLink()}>
-        <Icon name="phone" size={18} />
-        <span>{siteConfig.contact.phone}</span>
-      </a>
+      {
+        headerCta && cta && (
+          <a class="btn btn--primary site-nav__cta" href={cta.href} target={cta.target} rel={cta.rel}>
+            {headerCta.icon && <Icon name={headerCta.icon} size={18} />}
+            <span>{headerCta.label}</span>
+          </a>
+        )
+      }
     </nav>
   </div>
 </header>
@@ -48,6 +48,7 @@ const current = Astro.url.pathname;
 <script>
   const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
   const nav = document.getElementById('site-nav');
+  const header = document.querySelector('.site-header');
   if (toggle && nav) {
     const setOpen = (open: boolean) => {
       toggle.setAttribute('aria-expanded', String(open));
@@ -61,6 +62,10 @@ const current = Astro.url.pathname;
       }
     });
   }
+  // Soft shadow once the page is scrolled
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 </script>
 
 <style>
@@ -68,9 +73,15 @@ const current = Astro.url.pathname;
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--color-bg) 94%, transparent);
-    backdrop-filter: saturate(1.5) blur(8px);
-    border-bottom: 1px solid var(--color-border);
+    background: rgb(255 255 255 / 0.9);
+    backdrop-filter: saturate(1.6) blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .site-header.is-scrolled {
+    border-bottom-color: var(--color-border);
+    box-shadow: 0 4px 20px rgb(11 21 48 / 0.05);
   }
 
   .site-header__inner {
@@ -87,13 +98,13 @@ const current = Astro.url.pathname;
     gap: 0.6rem;
     color: var(--color-secondary);
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     text-decoration: none;
   }
 
   .brand__logo {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: auto;
+    height: 1.75rem;
   }
 
   .nav-toggle {
@@ -102,8 +113,8 @@ const current = Astro.url.pathname;
     width: 2.75rem;
     height: 2.75rem;
     border: 1px solid var(--color-border);
-    border-radius: 0.5rem;
-    background: transparent;
+    border-radius: 0.75rem;
+    background: var(--color-bg);
     color: var(--color-secondary);
     cursor: pointer;
   }
@@ -122,10 +133,10 @@ const current = Astro.url.pathname;
     display: none;
     position: absolute;
     inset: var(--header-h) 0 auto 0;
-    padding: 1rem var(--gutter) 1.5rem;
+    padding: 0.5rem var(--gutter) 1.5rem;
     background: var(--color-bg);
     border-bottom: 1px solid var(--color-border);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-lg);
   }
 
   .site-nav.is-open {
@@ -133,16 +144,15 @@ const current = Astro.url.pathname;
   }
 
   .site-nav ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 
   .site-nav li a {
     display: block;
-    padding: 0.75rem 0.25rem;
+    padding: 0.9rem 0.25rem;
     color: var(--color-text);
-    font-weight: 600;
+    font-weight: 550;
+    font-size: 1.0625rem;
     text-decoration: none;
     border-bottom: 1px solid var(--color-border);
   }
@@ -151,7 +161,7 @@ const current = Astro.url.pathname;
     color: var(--color-primary-text);
   }
 
-  .site-nav__call {
+  .site-nav__cta {
     width: 100%;
   }
 
@@ -169,6 +179,10 @@ const current = Astro.url.pathname;
   }
 
   @media (min-width: 60em) {
+    .brand__logo {
+      height: 2rem;
+    }
+
     .nav-toggle {
       display: none;
     }
@@ -177,7 +191,7 @@ const current = Astro.url.pathname;
     :global(html:not(.js)) .site-nav {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1.25rem;
       position: static;
       padding: 0;
       border: 0;
@@ -192,23 +206,35 @@ const current = Astro.url.pathname;
     }
 
     .site-nav li a {
-      padding: 0.5rem 0.75rem;
+      position: relative;
+      padding: 0.5rem 0.85rem;
       border: 0;
-      border-radius: 999px;
+      font-size: 0.975rem;
+      color: var(--color-muted);
+      transition: color 0.2s ease;
     }
 
-    .site-nav li a:hover {
-      background: var(--color-surface);
-    }
-
+    .site-nav li a:hover,
     .site-nav a[aria-current='page'] {
-      background: var(--color-surface);
+      color: var(--color-secondary);
     }
 
-    .site-nav__call {
+    .site-nav a[aria-current='page']::after {
+      content: '';
+      position: absolute;
+      left: 0.85rem;
+      right: 0.85rem;
+      bottom: 0.15rem;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--color-primary);
+    }
+
+    .site-nav__cta {
       width: auto;
-      min-height: 2.5rem;
-      padding: 0.5rem 1.1rem;
+      min-height: 2.75rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.95rem;
     }
   }
 </style>

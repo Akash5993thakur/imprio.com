@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<rect width="1200" height="900" fill="#fbf1ea"/>
+<circle cx="1080" cy="120" r="260" fill="#d9541e" opacity=".10"/>
+<circle cx="80" cy="860" r="220" fill="#d9541e" opacity=".08"/>
+<!-- browser -->
+<g transform="translate(110 130)">
+  <rect width="980" height="660" rx="22" fill="#fff" stroke="#e3e7f0" stroke-width="2"/>
+  <path d="M0 22a22 22 0 0 1 22-22h936a22 22 0 0 1 22 22v34H0z" fill="#f2f4f9"/>
+  <circle cx="30" cy="28" r="7" fill="#ff6159"/><circle cx="54" cy="28" r="7" fill="#ffbd2e"/><circle cx="78" cy="28" r="7" fill="#28c941"/>
+  <rect x="300" y="16" width="380" height="24" rx="12" fill="#fff" stroke="#e3e7f0"/>
+  <!-- nav -->
+  <rect x="40" y="86" width="34" height="34" rx="10" fill="#d9541e"/>
+  <text x="88" y="111" font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="750" fill="#3a1a0e">Spice Route Kitchen</text>
+  <rect x="560" y="96" width="64" height="12" rx="6" fill="#cfd5e3"/><rect x="644" y="96" width="64" height="12" rx="6" fill="#cfd5e3"/><rect x="728" y="96" width="64" height="12" rx="6" fill="#cfd5e3"/>
+  <rect x="812" y="84" width="128" height="36" rx="18" fill="#d9541e"/>
+  <!-- hero -->
+  <rect x="40" y="150" width="900" height="250" rx="18" fill="#3a1a0e"/>
+  <text x="80" y="230" font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="40" font-weight="800" fill="#fff">Real flavours,</text>
+  <text x="80" y="280" font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="40" font-weight="800" fill="#fff">made fresh daily</text>
+  <rect x="80" y="314" width="200" height="46" rx="23" fill="#d9541e"/>
+  <text x="180" y="344" font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">View menu</text>
+  <circle cx="770" cy="275" r="95" fill="#d9541e" opacity=".35"/><circle cx="770" cy="275" r="55" fill="#d9541e" opacity=".6"/>
+  <!-- cards -->
+  <rect x="40" y="430" width="282" height="190" rx="16" fill="#fff" stroke="#e3e7f0" stroke-width="2"/>
+  <rect x="62" y="452" width="48" height="48" rx="12" fill="#d9541e" opacity=".15"/>
+  <text x="62" y="540" font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#3a1a0e">Starters</text>
+  <rect x="62" y="560" width="200" height="11" rx="5.5" fill="#d7dce8"/><rect x="62" y="582" width="150" height="11" rx="5.5" fill="#d7dce8"/><rect x="346" y="430" width="282" height="190" rx="16" fill="#fff" stroke="#e3e7f0" stroke-width="2"/>
+  <rect x="368" y="452" width="48" height="48" rx="12" fill="#d9541e" opacity=".15"/>
+  <text x="368" y="540" font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#3a1a0e">Main course</text>
+  <rect x="368" y="560" width="200" height="11" rx="5.5" fill="#d7dce8"/><rect x="368" y="582" width="150" height="11" rx="5.5" fill="#d7dce8"/><rect x="652" y="430" width="282" height="190" rx="16" fill="#fff" stroke="#e3e7f0" stroke-width="2"/>
+  <rect x="674" y="452" width="48" height="48" rx="12" fill="#d9541e" opacity=".15"/>
+  <text x="674" y="540" font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#3a1a0e">Desserts</text>
+  <rect x="674" y="560" width="200" height="11" rx="5.5" fill="#d7dce8"/><rect x="674" y="582" width="150" height="11" rx="5.5" fill="#d7dce8"/>
+</g>
+<!-- sample ribbon -->
+<g transform="translate(110 52)">
+  <rect width="190" height="44" rx="22" fill="#0B1530"/>
+  <text x="95" y="29" font-family="Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="1.5">SAMPLE PROJECT</text>
+</g>
+</svg>

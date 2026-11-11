@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
-  <rect width="800" height="600" fill="#f3d3c2"/>
-  <circle cx="680" cy="90" r="180" fill="#b4532a" opacity=".15"/>
-  <circle cx="80" cy="540" r="132" fill="#b4532a" opacity=".08"/>
-  <rect x="212.8" y="298.8" width="374.4" height="171.60000000000002" rx="15.600000000000001" fill="#b4532a"/>
-     <rect x="259.6" y="189.6" width="280.8" height="117" rx="15.600000000000001" fill="#2f2a26" opacity=".85"/>
-     <circle cx="400" cy="166.2" r="28.08" fill="#b4532a"/>
-  <text x="400" y="552" text-anchor="middle" font-family="system-ui,sans-serif" font-size="27" fill="#2f2a26" opacity=".7">Placeholder · services/gluten-free.svg</text>
-</svg>

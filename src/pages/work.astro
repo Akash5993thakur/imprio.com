@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { siteConfig } from '../config/site.config';
+
+const seo = siteConfig.seo.pages.work;
+---
+
+<BaseLayout title={seo.title} description={seo.description}>
+  <PageHeader copy={siteConfig.workPage} />
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid--3">
+        {siteConfig.projects.map((project, i) => <ProjectCard project={project} index={i} />)}
+      </div>
+      {siteConfig.workPage.note && <p class="note">{siteConfig.workPage.note}</p>}
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .note {
+    margin-top: 2.5rem;
+    text-align: center;
+    color: var(--color-muted);
+  }
+</style>

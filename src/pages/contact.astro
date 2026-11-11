@@ -8,75 +8,80 @@ import Icon from '../components/Icon.astro';
 import { siteConfig } from '../config/site.config';
 import { formatAddress, telLink, whatsappLink } from '../lib/utils';
 
-const { contact, contactPage } = siteConfig;
+const { contact, contactPage, hours } = siteConfig;
 const seo = siteConfig.seo.pages.contact;
 ---
 
 <BaseLayout title={seo.title} description={seo.description}>
-  <PageHeader heading={contactPage.heading} intro={contactPage.intro} />
+  <PageHeader copy={contactPage} />
 
   <section class="section">
     <div class="container contact">
-      <div class="contact__form card">
+      <div class="card contact__form reveal">
         <div class="card__body">
           <h2>{contactPage.formHeading}</h2>
           <ContactForm />
         </div>
       </div>
 
-      <div class="contact__info">
-        <h2 class="visually-hidden">Contact details</h2>
-        <ul class="methods" role="list">
+      <aside class="contact__info" aria-labelledby="info-heading">
+        <h2 id="info-heading" class="visually-hidden">Other ways to reach us</h2>
+
+        <div class="wa-card glow-bg reveal">
+          <Icon name="whatsapp" size={32} />
+          <h3>{contactPage.whatsappCard.heading}</h3>
+          {contact.responseTime && <p>{contact.responseTime}</p>}
+          <a class="btn btn--primary" href={whatsappLink()} target="_blank" rel="noopener noreferrer">
+            <Icon name="whatsapp" size={20} />
+            {contactPage.whatsappCard.buttonLabel}
+          </a>
+        </div>
+
+        <ul class="list-reset methods reveal" style="--reveal-i:1">
           <li>
-            <Icon name="phone" />
-            <div>
-              <h3>Call</h3>
-              <a href={telLink()}>{contact.phone}</a>
-            </div>
-          </li>
-          <li>
-            <Icon name="whatsapp" />
-            <div>
-              <h3>WhatsApp</h3>
-              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer">Message us on WhatsApp</a>
-            </div>
-          </li>
-          <li>
-            <Icon name="mail" />
+            <span class="icon-badge"><Icon name="mail" size={20} /></span>
             <div>
               <h3>Email</h3>
               <a href={`mailto:${contact.email}`}>{contact.email}</a>
             </div>
           </li>
           <li>
-            <Icon name="pin" />
+            <span class="icon-badge"><Icon name="phone" size={20} /></span>
             <div>
-              <h3>Visit</h3>
-              <address>
-                {formatAddress().map((line, i) => (i === 0 ? line : <><br />{line}</>))}
-              </address>
-              {
-                contact.mapLink && (
-                  <a href={contact.mapLink} target="_blank" rel="noopener noreferrer">
-                    Get directions
-                  </a>
-                )
-              }
+              <h3>Phone</h3>
+              <a href={telLink()}>{contact.phone}</a>
+            </div>
+          </li>
+          <li>
+            <span class="icon-badge"><Icon name="pin" size={20} /></span>
+            <div>
+              <h3>Location</h3>
+              <address>{formatAddress().map((line, i) => (i === 0 ? line : <><br />{line}</>))}</address>
             </div>
           </li>
         </ul>
 
-        <div class="hours-box">
-          <h3><Icon name="clock" size={20} /> Opening hours</h3>
-          <OpeningHours />
-        </div>
-      </div>
+        {
+          hours.length > 0 && (
+            <div class="hours-box">
+              <h3>
+                <Icon name="clock" size={20} /> Opening hours
+              </h3>
+              <OpeningHours />
+            </div>
+          )
+        }
+      </aside>
     </div>
 
-    <div class="container map-wrap">
-      <h2 class="visually-hidden">Find us</h2>
-      <MapEmbed />
-    </div>
+    {
+      contact.mapEmbedUrl && (
+        <div class="container map-wrap">
+          <h2 class="visually-hidden">Find us</h2>
+          <MapEmbed />
+        </div>
+      )
+    }
   </section>
 </BaseLayout>
 
@@ -89,47 +94,94 @@ const seo = siteConfig.seo.pages.contact;
 
   @media (min-width: 60em) {
     .contact {
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 1.5fr 1fr;
       gap: 3rem;
     }
   }
 
   .contact__form h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
+  }
+
+  @media (min-width: 48em) {
+    .contact__form .card__body {
+      padding: 2.5rem;
+    }
+  }
+
+  .contact__info {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .wa-card {
+    display: grid;
+    justify-items: start;
+    gap: 0.5rem;
+    padding: 2rem;
+    border-radius: var(--radius);
+  }
+
+  .wa-card > :global(svg) {
+    color: var(--color-accent);
+  }
+
+  .wa-card h3 {
+    margin-top: 0.5rem;
+    color: inherit;
+    font-size: 1.375rem;
+  }
+
+  .wa-card p {
+    color: var(--color-on-dark-muted);
+    margin-bottom: 0.75rem;
   }
 
   .methods {
     display: grid;
-    gap: 1.25rem;
-    padding: 0;
-    list-style: none;
+    gap: 0.25rem;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
   }
 
   .methods li {
     display: flex;
+    align-items: center;
     gap: 1rem;
+    padding-block: 1rem;
   }
 
-  .methods li > :global(svg) {
-    flex: none;
+  .methods li + li {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .methods .icon-badge {
     width: 2.75rem;
     height: 2.75rem;
-    padding: 0.6rem;
-    border-radius: 50%;
-    background: var(--color-surface);
-    color: var(--color-primary-text);
+    margin: 0;
   }
 
   .methods h3 {
-    font-size: 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .methods a {
+    font-weight: 550;
+    word-break: break-word;
   }
 
   address {
     font-style: normal;
+    font-weight: 550;
   }
 
   .hours-box {
-    margin-top: 2rem;
     padding: 1.25rem 1.5rem;
     border-radius: var(--radius);
     background: var(--color-surface);

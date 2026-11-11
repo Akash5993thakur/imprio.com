@@ -153,9 +153,10 @@ const { contactPage } = siteConfig;
     width: 100%;
     min-height: 3rem;
     padding: 0.7rem 0.9rem;
-    border: 1px solid #8a8a8a; /* ≥3:1 against white for form controls */
-    border-radius: 0.5rem;
+    border: 1px solid #8b93a7; /* ≥3:1 against white for form controls */
+    border-radius: 0.75rem;
     background: #fff;
+    transition: border-color 0.2s ease;
     color: var(--color-text);
   }
 
@@ -166,13 +167,25 @@ const { contactPage } = siteConfig;
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 3px solid var(--color-accent);
-    outline-offset: 1px;
+    outline: 3px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+    outline-offset: 0;
     border-color: var(--color-primary);
+  }
+
+  input:hover,
+  select:hover,
+  textarea:hover {
+    border-color: var(--color-secondary);
   }
 
   button {
     justify-self: start;
+  }
+
+  @media (max-width: 40em) {
+    button {
+      justify-self: stretch;
+    }
   }
 
   button:disabled {

@@ -1,14 +1,45 @@
 ---
+import type { SectionCopy } from '../config/site.config';
+
 interface Props {
-  heading: string;
-  intro?: string;
+  copy: SectionCopy;
 }
-const { heading, intro } = Astro.props;
+const { copy } = Astro.props;
 ---
 
-<section class="page-header">
+<section class="page-header glow-bg on-dark">
   <div class="container">
-    <h1>{heading}</h1>
-    {intro && <p>{intro}</p>}
+    <div class="page-header__inner">
+      {copy.eyebrow && <p class="eyebrow">{copy.eyebrow}</p>}
+      <h1>{copy.heading}</h1>
+      {copy.intro && <p class="page-header__intro">{copy.intro}</p>}
+    </div>
   </div>
 </section>
+
+<style>
+  .page-header {
+    padding-block: 4rem 4.5rem;
+  }
+
+  @media (min-width: 48em) {
+    .page-header {
+      padding-block: 6rem 6.5rem;
+    }
+  }
+
+  .page-header__inner {
+    max-width: 48rem;
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+  }
+
+  .page-header__intro {
+    margin-top: 1.25rem;
+    color: var(--color-on-dark-muted);
+    font-size: 1.1875rem;
+    max-width: 38rem;
+  }
+</style>

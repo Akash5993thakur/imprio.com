@@ -6,6 +6,8 @@ import type { ThemeColors } from '../config/site.config';
  *  - `--color-*-contrast`: black or white, whichever reads best ON that colour
  *  - `--color-primary-text`: primary darkened (if needed) to reach 4.5:1 on white,
  *    used for links and coloured text.
+ *  - `--color-primary-fill`: primary darkened (if needed) so white button text reaches
+ *    4.5:1 — used as the background of primary buttons and badges.
  */
 
 type RGB = [number, number, number];
@@ -53,9 +55,11 @@ function ensureContrast(hex: string, bg = LIGHT, min = 4.5): string {
 }
 
 export function themeToCss(theme: ThemeColors): string {
+  const primaryContrast = contrastText(theme.primary);
   const vars: Record<string, string> = {
     '--color-primary': theme.primary,
-    '--color-primary-contrast': contrastText(theme.primary),
+    '--color-primary-contrast': primaryContrast,
+    '--color-primary-fill': primaryContrast === LIGHT ? ensureContrast(theme.primary, LIGHT) : theme.primary,
     '--color-primary-text': ensureContrast(theme.primary),
     '--color-secondary': theme.secondary,
     '--color-secondary-contrast': contrastText(theme.secondary),

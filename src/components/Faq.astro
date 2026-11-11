@@ -1,0 +1,97 @@
+---
+import { siteConfig } from '../config/site.config';
+import Icon from './Icon.astro';
+import SectionHead from './SectionHead.astro';
+
+const { faq } = siteConfig;
+---
+
+{
+  faq.items.length > 0 && (
+    <section class="section section--surface" aria-labelledby="faq-heading">
+      <div class="container faq">
+        <SectionHead copy={faq} id="faq-heading" />
+        <div class="faq__list">
+          {faq.items.map((item, i) => (
+            <details class="faq__item reveal" style={`--reveal-i:${i}`} open={i === 0}>
+              <summary>
+                <span>{item.question}</span>
+                <Icon name="chevron" class="faq__chevron" />
+              </summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .faq {
+    display: grid;
+    gap: 0;
+  }
+
+  @media (min-width: 64em) {
+    .faq {
+      grid-template-columns: 1fr 1.6fr;
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+
+  .faq__list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .faq__item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .faq__item[open] {
+    border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-border));
+    box-shadow: var(--shadow);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    font-weight: 600;
+    font-size: 1.0625rem;
+    color: var(--color-secondary);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:focus-visible {
+    outline-offset: -3px;
+    border-radius: var(--radius);
+  }
+
+  summary :global(.faq__chevron) {
+    flex: none;
+    color: var(--color-primary-text);
+    transition: transform 0.25s var(--ease);
+  }
+
+  .faq__item[open] summary :global(.faq__chevron) {
+    transform: rotate(180deg);
+  }
+
+  .faq__item p {
+    padding: 0 1.5rem 1.4rem;
+    color: var(--color-muted);
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import type { FeatureItem } from '../config/site.config';
+import Icon from './Icon.astro';
+
+interface Props {
+  items: FeatureItem[];
+  /** Render for a dark (navy) section. */
+  dark?: boolean;
+}
+const { items, dark = false } = Astro.props;
+---
+
+<ul class:list={['list-reset', 'grid', 'grid--4', 'features', { 'features--dark': dark }]}>
+  {
+    items.map((item, i) => (
+      <li class="feature reveal" style={`--reveal-i:${i}`}>
+        <span class="icon-badge">
+          <Icon name={item.icon} />
+        </span>
+        <h3>{item.title}</h3>
+        <p>{item.description}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .feature {
+    padding: 1.75rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .feature h3 {
+    margin-top: 0.25rem;
+  }
+
+  .feature p {
+    margin-top: 0.5rem;
+    color: var(--color-muted);
+  }
+
+  .features--dark .feature {
+    border-color: rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.03);
+  }
+
+  .features--dark .feature p {
+    color: var(--color-on-dark-muted);
+  }
+</style>

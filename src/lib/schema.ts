@@ -1,10 +1,11 @@
 import { siteConfig } from '../config/site.config';
 import { absoluteUrl } from './utils';
 
-/** schema.org LocalBusiness JSON-LD, generated entirely from the site config. */
-export function localBusinessSchema(): Record<string, unknown> {
+/** schema.org LocalBusiness-family JSON-LD (e.g. ProfessionalService), generated from the site config. */
+export function businessSchema(): Record<string, unknown> {
   const c = siteConfig;
   const a = c.contact.address;
+  const openHours = c.hours.filter((h) => !h.closed && h.opens && h.closes);
 
   return {
     '@context': 'https://schema.org',
@@ -15,28 +16,39 @@ export function localBusinessSchema(): Record<string, unknown> {
     slogan: c.tagline,
     url: absoluteUrl('/'),
     logo: absoluteUrl(c.logo.src),
-    image: [absoluteUrl(c.seo.ogImage), absoluteUrl(c.home.hero.image.src)],
+    image: absoluteUrl(c.seo.ogImage),
     telephone: c.contact.phone,
     email: c.contact.email,
-    ...(c.priceRange && { priceRange: c.priceRange }),
     address: {
       '@type': 'PostalAddress',
-      streetAddress: a.street,
+      ...(a.street && { streetAddress: a.street }),
       addressLocality: a.city,
       ...(a.region && { addressRegion: a.region }),
-      postalCode: a.postalCode,
+      ...(a.postalCode && { postalCode: a.postalCode }),
       addressCountry: a.country,
     },
+    ...(c.areaServed?.length && {
+      areaServed: c.areaServed.map((name) => ({ '@type': 'Country', name })),
+    }),
+    ...(c.knowsAbout?.length && { knowsAbout: c.knowsAbout }),
     ...(c.contact.mapLink && { hasMap: c.contact.mapLink }),
-    openingHoursSpecification: c.hours
-      .filter((h) => !h.closed && h.opens && h.closes)
-      .map((h) => ({
+    ...(openHours.length && {
+      openingHoursSpecification: openHours.map((h) => ({
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: h.days,
         opens: h.opens,
         closes: h.closes,
       })),
-    sameAs: c.social.map((s) => s.url),
+    }),
+    ...(c.social.length && { sameAs: c.social.map((s) => s.url) }),
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      telephone: c.contact.phone,
+      email: c.contact.email,
+      areaServed: c.contact.address.country,
+      ...(c.contact.languages?.length && { availableLanguage: c.contact.languages }),
+    },
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Services',
@@ -46,4 +58,22 @@ export function localBusinessSchema(): Record<string, unknown> {
       })),
     },
   };
+}
+
+/** FAQPage JSON-LD for pages that show the FAQ. */
+export function faqSchema(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: siteConfig.faq.items.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
+}
+
+/** Serialise for a <script type="application/ld+json"> block. */
+export function toJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c');
 }

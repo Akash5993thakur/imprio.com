@@ -1,26 +1,117 @@
 ---
 import type { Service } from '../config/site.config';
+import { siteConfig } from '../config/site.config';
+import { whatsappLink } from '../lib/utils';
+import Icon from './Icon.astro';
 
 interface Props {
   service: Service;
-  headingLevel?: 'h2' | 'h3';
+  /** "compact" for previews; "detailed" adds the feature list, price and enquiry button. */
+  variant?: 'compact' | 'detailed';
+  index?: number;
 }
-const { service, headingLevel: Heading = 'h3' } = Astro.props;
+const { service, variant = 'compact', index = 0 } = Astro.props;
+const detailed = variant === 'detailed';
+const enquireHref = whatsappLink(siteConfig.servicesPage.enquireMessage.replace('{service}', service.title));
 ---
 
-<article class="card">
-  <img
-    class="card__img"
-    src={service.image.src}
-    alt={service.image.alt}
-    width={service.image.width ?? 800}
-    height={service.image.height ?? 600}
-    loading="lazy"
-    decoding="async"
-  />
+<article class:list={['card', 'card--hover', 'service', 'reveal', { 'service--detailed': detailed }]} style={`--reveal-i:${index}`}>
+  {
+    service.image && (
+      <img
+        class="service__img"
+        src={service.image.src}
+        alt={service.image.alt}
+        width={service.image.width ?? 800}
+        height={service.image.height ?? 600}
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
   <div class="card__body">
-    <Heading>{service.title}</Heading>
+    <span class="icon-badge"><Icon name={service.icon} /></span>
+    {detailed ? <h2 class="service__title">{service.title}</h2> : <h3 class="service__title">{service.title}</h3>}
     <p>{service.description}</p>
-    {service.price && <p class="price">{service.price}</p>}
+
+    {
+      detailed && service.features && service.features.length > 0 && (
+        <ul class="list-reset service__features">
+          {service.features.map((f) => (
+            <li>
+              <Icon name="check" size={18} />
+              <span>{f}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      detailed && (
+        <div class="service__foot">
+          {service.price && <p class="service__price">{service.price}</p>}
+          <a class="btn btn--ghost" href={enquireHref} target="_blank" rel="noopener noreferrer">
+            <Icon name="whatsapp" size={18} />
+            {siteConfig.servicesPage.enquireLabel}
+            <span class="visually-hidden">about {service.title} (opens WhatsApp)</span>
+          </a>
+        </div>
+      )
+    }
   </div>
 </article>
+
+<style>
+  .service__img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+
+  .service__title {
+    font-size: 1.2rem;
+  }
+
+  .service--detailed .service__title {
+    font-size: 1.5rem;
+  }
+
+  .service--detailed .card__body {
+    padding: 2rem;
+  }
+
+  .service__features {
+    display: grid;
+    gap: 0.6rem;
+    margin-block: 0.75rem 0.5rem;
+  }
+
+  .service__features li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .service__features :global(svg) {
+    flex: none;
+    margin-top: 0.2rem;
+    color: var(--color-primary-text);
+  }
+
+  .service__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .service__price {
+    font-weight: 650;
+    color: var(--color-secondary);
+  }
+</style>

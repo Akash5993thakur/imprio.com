@@ -1,24 +1,31 @@
 ---
 import { siteConfig } from '../config/site.config';
-import { whatsappLink } from '../lib/utils';
+import { linkAttrs } from '../lib/utils';
 import Icon from './Icon.astro';
 
 const { cta } = siteConfig;
+const primary = linkAttrs(cta.primary);
+const secondary = cta.secondary ? linkAttrs(cta.secondary) : undefined;
 ---
 
-<section class="section" aria-labelledby="cta-heading">
+<section class="section cta-section" aria-labelledby="cta-heading">
   <div class="container">
-    <div class="cta">
-      <div>
-        <h2 id="cta-heading">{cta.heading}</h2>
-        <p>{cta.text}</p>
-      </div>
-      <div class="btn-row">
-        <a class="btn btn--accent" href={cta.buttonHref}>{cta.buttonLabel}</a>
-        <a class="btn btn--outline" href={whatsappLink()} target="_blank" rel="noopener noreferrer">
-          <Icon name="whatsapp" size={20} />
-          WhatsApp us
+    <div class="cta glow-bg reveal">
+      <h2 id="cta-heading">{cta.heading}</h2>
+      <p>{cta.text}</p>
+      <div class="btn-row cta__buttons">
+        <a class="btn btn--primary btn--lg" href={primary.href} target={primary.target} rel={primary.rel}>
+          {primary.isWhatsapp && <Icon name="whatsapp" size={20} />}
+          {cta.primary.label}
         </a>
+        {
+          cta.secondary && secondary && (
+            <a class="btn btn--ghost-light btn--lg" href={secondary.href} target={secondary.target} rel={secondary.rel}>
+              {secondary.isWhatsapp && <Icon name="whatsapp" size={20} />}
+              {cta.secondary.label}
+            </a>
+          )
+        }
       </div>
     </div>
   </div>
@@ -26,29 +33,37 @@ const { cta } = siteConfig;
 
 <style>
   .cta {
-    display: grid;
-    gap: 1.5rem;
-    padding: 2rem 1.5rem;
-    border-radius: calc(var(--radius) * 1.5);
-    background: var(--color-primary);
-    color: var(--color-primary-contrast);
-  }
-
-  .cta h2 {
-    color: inherit;
-  }
-
-  .cta p {
-    margin-top: 0.5rem;
-    max-width: 36rem;
-    font-size: 1.1rem;
+    padding: 3rem 1.5rem;
+    border-radius: calc(var(--radius) * 1.75);
+    text-align: center;
   }
 
   @media (min-width: 48em) {
     .cta {
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      padding: 3rem;
+      padding: 5rem 3rem;
     }
+  }
+
+  .cta::before {
+    inset: auto auto -60% 50%;
+    translate: -50% 0;
+    opacity: 0.7;
+  }
+
+  .cta h2 {
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+
+  .cta p {
+    max-width: 34rem;
+    margin: 1rem auto 0;
+    color: var(--color-on-dark-muted);
+    font-size: 1.125rem;
+  }
+
+  .cta__buttons {
+    justify-content: center;
+    margin-top: 2rem;
   }
 </style>

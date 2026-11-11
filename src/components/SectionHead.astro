@@ -1,0 +1,18 @@
+---
+import type { SectionCopy } from '../config/site.config';
+
+interface Props {
+  copy: SectionCopy;
+  center?: boolean;
+  /** Use "h1" for page headers. */
+  as?: 'h1' | 'h2';
+  id?: string;
+}
+const { copy, center = false, as: Heading = 'h2', id } = Astro.props;
+---
+
+<div class:list={['section-head', 'reveal', { 'section-head--center': center }]}>
+  {copy.eyebrow && <p class="eyebrow">{copy.eyebrow}</p>}
+  <Heading id={id}>{copy.heading}</Heading>
+  {copy.intro && <p>{copy.intro}</p>}
+</div>

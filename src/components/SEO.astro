@@ -1,7 +1,7 @@
 ---
 import { siteConfig } from '../config/site.config';
 import { absoluteUrl } from '../lib/utils';
-import { localBusinessSchema } from '../lib/schema';
+import { businessSchema, toJsonLd } from '../lib/schema';
 
 interface Props {
   /** Page title. Omit on the home page to use seo.title as-is. */
@@ -9,13 +9,13 @@ interface Props {
   description?: string;
   image?: string;
   noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
 }
 
-const { title, description = siteConfig.seo.description, image = siteConfig.seo.ogImage, noindex = false } = Astro.props;
+const { title, description = siteConfig.seo.description, image = siteConfig.seo.ogImage, noindex = false, jsonLd = [] } = Astro.props;
 const fullTitle = title ? `${title} | ${siteConfig.businessName}` : siteConfig.seo.title;
 const canonical = absoluteUrl(Astro.url.pathname);
 const ogImage = absoluteUrl(image);
-const schema = JSON.stringify(localBusinessSchema()).replace(/</g, '\\u003c');
 ---
 
 <title>{fullTitle}</title>
@@ -40,5 +40,6 @@ const schema = JSON.stringify(localBusinessSchema()).replace(/</g, '\\u003c');
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
 
-<!-- LocalBusiness structured data -->
-<script type="application/ld+json" set:html={schema} />
+<!-- Structured data -->
+<script type="application/ld+json" set:html={toJsonLd(businessSchema())} />
+{jsonLd.map((block) => <script type="application/ld+json" set:html={toJsonLd(block)} />)}

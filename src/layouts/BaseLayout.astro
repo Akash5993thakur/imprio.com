@@ -1,4 +1,5 @@
 ---
+import '@fontsource-variable/inter';
 import '../styles/global.css';
 import { siteConfig } from '../config/site.config';
 import { themeToCss } from '../lib/theme';
@@ -12,6 +13,8 @@ interface Props {
   description?: string;
   image?: string;
   noindex?: boolean;
+  /** Extra JSON-LD blocks for this page (e.g. FAQPage). */
+  jsonLd?: Record<string, unknown>[];
 }
 
 const themeCss = themeToCss(siteConfig.theme);
@@ -22,8 +25,8 @@ const themeCss = themeToCss(siteConfig.theme);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content={siteConfig.theme.primary} />
-    <link rel="icon" href={siteConfig.favicon} />
+    <meta name="theme-color" content={siteConfig.theme.secondary} />
+    <link rel="icon" href={siteConfig.favicon} type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap.xml" />
     <script is:inline>document.documentElement.classList.add('js');</script>
     <!-- Brand colours generated from site.config.ts -->
@@ -38,5 +41,27 @@ const themeCss = themeToCss(siteConfig.theme);
     </main>
     <Footer />
     <WhatsAppButton />
+
+    <script>
+      // Subtle fade-up for elements marked `.reveal` (skipped when reduced motion is preferred).
+      const items = document.querySelectorAll<HTMLElement>('.reveal');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce || !('IntersectionObserver' in window)) {
+        items.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.1 },
+        );
+        items.forEach((el) => io.observe(el));
+      }
+    </script>
   </body>
 </html>
