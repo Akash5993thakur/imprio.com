@@ -1,0 +1,54 @@
+---
+import { siteConfig } from '../config/site.config';
+import { whatsappLink } from '../lib/utils';
+import Icon from './Icon.astro';
+
+const { cta } = siteConfig;
+---
+
+<section class="section" aria-labelledby="cta-heading">
+  <div class="container">
+    <div class="cta">
+      <div>
+        <h2 id="cta-heading">{cta.heading}</h2>
+        <p>{cta.text}</p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn--accent" href={cta.buttonHref}>{cta.buttonLabel}</a>
+        <a class="btn btn--outline" href={whatsappLink()} target="_blank" rel="noopener noreferrer">
+          <Icon name="whatsapp" size={20} />
+          WhatsApp us
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    display: grid;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem;
+    border-radius: calc(var(--radius) * 1.5);
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+  }
+
+  .cta h2 {
+    color: inherit;
+  }
+
+  .cta p {
+    margin-top: 0.5rem;
+    max-width: 36rem;
+    font-size: 1.1rem;
+  }
+
+  @media (min-width: 48em) {
+    .cta {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      padding: 3rem;
+    }
+  }
+</style>

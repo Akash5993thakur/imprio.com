@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#f7ead9"/>
+  <circle cx="680" cy="90" r="180" fill="#d9a066" opacity=".15"/>
+  <circle cx="80" cy="540" r="132" fill="#b4532a" opacity=".08"/>
+  <ellipse cx="400" cy="330" rx="234" ry="156" fill="#d9a066"/>
+     <path d="M267.4 252 q39 70.2 78 140.4" stroke="#f7ead9" stroke-width="12.48" fill="none" stroke-linecap="round"/><path d="M361 252 q39 70.2 78 140.4" stroke="#f7ead9" stroke-width="12.48" fill="none" stroke-linecap="round"/><path d="M454.6 252 q39 70.2 78 140.4" stroke="#f7ead9" stroke-width="12.48" fill="none" stroke-linecap="round"/>
+  <text x="400" y="552" text-anchor="middle" font-family="system-ui,sans-serif" font-size="27" fill="#2f2a26" opacity=".7">Placeholder · services/bread.svg</text>
+</svg>

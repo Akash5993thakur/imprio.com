@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <rect width="1200" height="900" fill="#f6e3c8"/>
+  <circle cx="1020" cy="135" r="270" fill="#e9b949" opacity=".15"/>
+  <circle cx="120" cy="810" r="198" fill="#b4532a" opacity=".08"/>
+  <ellipse cx="600" cy="495" rx="351" ry="234" fill="#e9b949"/>
+     <path d="M401.1 378 q58.5 105.3 117 210.6" stroke="#f6e3c8" stroke-width="18.72" fill="none" stroke-linecap="round"/><path d="M541.5 378 q58.5 105.3 117 210.6" stroke="#f6e3c8" stroke-width="18.72" fill="none" stroke-linecap="round"/><path d="M681.9 378 q58.5 105.3 117 210.6" stroke="#f6e3c8" stroke-width="18.72" fill="none" stroke-linecap="round"/>
+  <text x="600" y="828" text-anchor="middle" font-family="system-ui,sans-serif" font-size="41" fill="#2f2a26" opacity=".7">Placeholder · public/images/hero.svg</text>
+</svg>

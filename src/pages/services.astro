@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { siteConfig } from '../config/site.config';
+
+const seo = siteConfig.seo.pages.services;
+---
+
+<BaseLayout title={seo.title} description={seo.description}>
+  <PageHeader heading={siteConfig.servicesPage.heading} intro={siteConfig.servicesPage.intro} />
+
+  <section class="section">
+    <div class="container">
+      <h2 class="visually-hidden">All services</h2>
+      <div class="grid grid--3">
+        {siteConfig.services.map((service) => <ServiceCard service={service} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>

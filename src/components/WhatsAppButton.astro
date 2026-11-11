@@ -1,0 +1,43 @@
+---
+import { whatsappLink } from '../lib/utils';
+import Icon from './Icon.astro';
+---
+
+<a
+  class="wa-float"
+  href={whatsappLink()}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Chat with us on WhatsApp (opens in a new tab)"
+>
+  <Icon name="whatsapp" size={30} />
+</a>
+
+<style>
+  .wa-float {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    /* WhatsApp brand green, darkened so the white icon meets 3:1 contrast */
+    background: #1a8f4a;
+    color: #fff;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.25);
+    transition: transform 0.2s ease;
+  }
+
+  .wa-float:hover {
+    transform: scale(1.06);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wa-float {
+      transition: none;
+    }
+  }
+</style>

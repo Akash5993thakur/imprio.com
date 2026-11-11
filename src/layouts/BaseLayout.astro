@@ -1,0 +1,42 @@
+---
+import '../styles/global.css';
+import { siteConfig } from '../config/site.config';
+import { themeToCss } from '../lib/theme';
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const themeCss = themeToCss(siteConfig.theme);
+---
+
+<!doctype html>
+<html lang={siteConfig.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content={siteConfig.theme.primary} />
+    <link rel="icon" href={siteConfig.favicon} />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <!-- Brand colours generated from site.config.ts -->
+    <style set:html={themeCss}></style>
+    <SEO {...Astro.props} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppButton />
+  </body>
+</html>

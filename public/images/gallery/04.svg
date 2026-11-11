@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#f3d3c2"/>
+  <circle cx="680" cy="120" r="240" fill="#b4532a" opacity=".15"/>
+  <circle cx="80" cy="720" r="176" fill="#b4532a" opacity=".08"/>
+  <rect x="150.4" y="398.4" width="499.2" height="228.8" rx="20.8" fill="#b4532a"/>
+     <rect x="212.79999999999998" y="252.79999999999998" width="374.40000000000003" height="156" rx="20.8" fill="#2f2a26" opacity=".85"/>
+     <circle cx="400" cy="221.6" r="37.44" fill="#b4532a"/>
+  <text x="400" y="736" text-anchor="middle" font-family="system-ui,sans-serif" font-size="36" fill="#2f2a26" opacity=".7">Placeholder · gallery/04.svg</text>
+</svg>

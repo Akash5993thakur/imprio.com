@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import Testimonials from '../components/Testimonials.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { siteConfig } from '../config/site.config';
+
+const { hero, servicesHeading, servicesIntro, servicesPreviewCount } = siteConfig.home;
+const preview = siteConfig.services.slice(0, servicesPreviewCount);
+---
+
+<BaseLayout>
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="container hero__inner">
+      <div class="hero__text">
+        <p class="eyebrow">{siteConfig.tagline}</p>
+        <h1 id="hero-heading">{hero.heading}</h1>
+        <p class="hero__sub">{hero.subheading}</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={hero.primaryCta.href}>{hero.primaryCta.label}</a>
+          {hero.secondaryCta && <a class="btn btn--outline" href={hero.secondaryCta.href}>{hero.secondaryCta.label}</a>}
+        </div>
+      </div>
+      <img
+        class="hero__img"
+        src={hero.image.src}
+        alt={hero.image.alt}
+        width={hero.image.width ?? 1200}
+        height={hero.image.height ?? 900}
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="services-heading">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="services-heading">{servicesHeading}</h2>
+        <p>{servicesIntro}</p>
+      </div>
+      <div class="grid grid--3">
+        {preview.map((service) => <ServiceCard service={service} />)}
+      </div>
+      {
+        siteConfig.services.length > preview.length && (
+          <p class="more">
+            <a class="btn btn--outline" href="/services/">View all services</a>
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <Testimonials />
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: 2.5rem 3rem;
+    background: linear-gradient(180deg, var(--color-surface), var(--color-bg));
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.75rem;
+    color: var(--color-primary-text);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+
+  .hero__sub {
+    margin-block: 1rem 1.75rem;
+    max-width: 34rem;
+    color: var(--color-muted);
+    font-size: 1.15rem;
+  }
+
+  .hero .btn--outline {
+    color: var(--color-secondary);
+  }
+
+  .hero__img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: calc(var(--radius) * 1.5);
+    box-shadow: var(--shadow);
+  }
+
+  @media (min-width: 56em) {
+    .hero {
+      padding-block: 4.5rem;
+    }
+
+    .hero__inner {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 3rem;
+    }
+  }
+
+  .more {
+    margin-top: 2rem;
+    text-align: center;
+  }
+</style>

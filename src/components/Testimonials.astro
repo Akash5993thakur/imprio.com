@@ -1,0 +1,86 @@
+---
+import { siteConfig } from '../config/site.config';
+import Icon from './Icon.astro';
+
+interface Props {
+  heading?: string;
+}
+const { heading = siteConfig.home.testimonialsHeading } = Astro.props;
+---
+
+{
+  siteConfig.testimonials.length > 0 && (
+    <section class="section section--surface" aria-labelledby="testimonials-heading">
+      <div class="container">
+        <div class="section-head section-head--center">
+          <h2 id="testimonials-heading">{heading}</h2>
+        </div>
+        <ul class="grid grid--3 testimonials" role="list">
+          {siteConfig.testimonials.map((t) => (
+            <li class="card testimonial">
+              <figure>
+                {t.rating && (
+                  <div class="stars" role="img" aria-label={`Rated ${t.rating} out of 5`}>
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <Icon name="star" size={18} class={i < (t.rating ?? 0) ? 'on' : 'off'} />
+                    ))}
+                  </div>
+                )}
+                <blockquote>
+                  <p>“{t.quote}”</p>
+                </blockquote>
+                <figcaption>
+                  <strong>{t.name}</strong>
+                  {t.role && <span>{t.role}</span>}
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .testimonials {
+    list-style: none;
+    padding: 0;
+  }
+
+  .testimonial figure {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    padding: 1.5rem;
+  }
+
+  .stars {
+    display: flex;
+    gap: 0.15rem;
+  }
+
+  .stars :global(.on) {
+    color: var(--color-accent);
+  }
+
+  .stars :global(.off) {
+    color: var(--color-border);
+  }
+
+  blockquote {
+    flex: 1;
+    font-size: 1.05rem;
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+  }
+
+  figcaption span {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+</style>

@@ -1,0 +1,210 @@
+---
+import { siteConfig } from '../config/site.config';
+import { absoluteUrl } from '../lib/utils';
+
+/**
+ * Web3Forms contact form.
+ * The access key comes from PUBLIC_WEB3FORMS_ACCESS_KEY at build time (.env locally,
+ * or the Cloudflare Pages environment variables). Web3Forms keys are meant to be
+ * public — they only allow sending to the email the key was created for.
+ *
+ * Works without JavaScript (normal POST → redirect to /thanks/). With JS it submits
+ * via fetch and shows the result inline.
+ */
+const accessKey = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY;
+const configured = Boolean(accessKey && accessKey !== 'your-access-key-here');
+const { contactPage } = siteConfig;
+---
+
+<form
+  class="contact-form"
+  action="https://api.web3forms.com/submit"
+  method="POST"
+  data-success={contactPage.successMessage}
+  aria-describedby="form-status"
+>
+  <input type="hidden" name="access_key" value={accessKey ?? ''} />
+  <input type="hidden" name="subject" value={`New website enquiry — ${siteConfig.businessName}`} />
+  <input type="hidden" name="from_name" value={`${siteConfig.businessName} website`} />
+  <input type="hidden" name="redirect" value={absoluteUrl('/thanks/')} />
+  <!-- Spam honeypot: real users never see or fill this -->
+  <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+  {
+    !configured && (
+      <p class="form-warning" role="note">
+        Form not connected: set <code>PUBLIC_WEB3FORMS_ACCESS_KEY</code> (see README).
+      </p>
+    )
+  }
+
+  <div class="field">
+    <label for="cf-name">Name <span aria-hidden="true">*</span></label>
+    <input id="cf-name" name="name" type="text" autocomplete="name" required />
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="cf-email">Email <span aria-hidden="true">*</span></label>
+      <input id="cf-email" name="email" type="email" autocomplete="email" required />
+    </div>
+    <div class="field">
+      <label for="cf-phone">Phone <span class="optional">(optional)</span></label>
+      <input id="cf-phone" name="phone" type="tel" autocomplete="tel" />
+    </div>
+  </div>
+
+  {
+    siteConfig.services.length > 0 && (
+      <div class="field">
+        <label for="cf-service">I'm interested in <span class="optional">(optional)</span></label>
+        <select id="cf-service" name="service">
+          <option value="">Choose a service…</option>
+          {siteConfig.services.map((s) => <option>{s.title}</option>)}
+          <option>Something else</option>
+        </select>
+      </div>
+    )
+  }
+
+  <div class="field">
+    <label for="cf-message">Message <span aria-hidden="true">*</span></label>
+    <textarea id="cf-message" name="message" rows="5" required></textarea>
+  </div>
+
+  <p class="required-note"><span aria-hidden="true">*</span> Required fields</p>
+
+  <button class="btn btn--primary" type="submit">Send message</button>
+  <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('.contact-form');
+  const status = form?.querySelector<HTMLElement>('.form-status');
+  const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!status || !button) return;
+
+    const data = Object.fromEntries(new FormData(form));
+    delete data.redirect; // only used by the no-JS fallback
+
+    button.disabled = true;
+    status.className = 'form-status';
+    status.textContent = 'Sending…';
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message || 'Something went wrong.');
+      form.reset();
+      status.classList.add('is-success');
+      status.textContent = form.dataset.success ?? 'Thank you!';
+    } catch (err) {
+      status.classList.add('is-error');
+      status.textContent = `Sorry, your message could not be sent (${(err as Error).message}). Please call or WhatsApp us instead.`;
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .field-row {
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  @media (min-width: 40em) {
+    .field-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  label {
+    font-weight: 600;
+  }
+
+  .optional,
+  .required-note {
+    color: var(--color-muted);
+    font-weight: 400;
+    font-size: 0.9rem;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #8a8a8a; /* ≥3:1 against white for form controls */
+    border-radius: 0.5rem;
+    background: #fff;
+    color: var(--color-text);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 1px;
+    border-color: var(--color-primary);
+  }
+
+  button {
+    justify-self: start;
+  }
+
+  button:disabled {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  .form-status:empty {
+    display: none;
+  }
+
+  .form-status {
+    padding: 0.85rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--color-surface);
+  }
+
+  .form-status.is-success {
+    background: #e6f4ea;
+    color: #1e4620;
+  }
+
+  .form-status.is-error {
+    background: #fdecea;
+    color: #611a15;
+  }
+
+  .form-warning {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: #fff4e5;
+    color: #663c00;
+    font-size: 0.9rem;
+  }
+</style>

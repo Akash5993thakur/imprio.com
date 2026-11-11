@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ContactForm from '../components/ContactForm.astro';
+import MapEmbed from '../components/MapEmbed.astro';
+import OpeningHours from '../components/OpeningHours.astro';
+import Icon from '../components/Icon.astro';
+import { siteConfig } from '../config/site.config';
+import { formatAddress, telLink, whatsappLink } from '../lib/utils';
+
+const { contact, contactPage } = siteConfig;
+const seo = siteConfig.seo.pages.contact;
+---
+
+<BaseLayout title={seo.title} description={seo.description}>
+  <PageHeader heading={contactPage.heading} intro={contactPage.intro} />
+
+  <section class="section">
+    <div class="container contact">
+      <div class="contact__form card">
+        <div class="card__body">
+          <h2>{contactPage.formHeading}</h2>
+          <ContactForm />
+        </div>
+      </div>
+
+      <div class="contact__info">
+        <h2 class="visually-hidden">Contact details</h2>
+        <ul class="methods" role="list">
+          <li>
+            <Icon name="phone" />
+            <div>
+              <h3>Call</h3>
+              <a href={telLink()}>{contact.phone}</a>
+            </div>
+          </li>
+          <li>
+            <Icon name="whatsapp" />
+            <div>
+              <h3>WhatsApp</h3>
+              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer">Message us on WhatsApp</a>
+            </div>
+          </li>
+          <li>
+            <Icon name="mail" />
+            <div>
+              <h3>Email</h3>
+              <a href={`mailto:${contact.email}`}>{contact.email}</a>
+            </div>
+          </li>
+          <li>
+            <Icon name="pin" />
+            <div>
+              <h3>Visit</h3>
+              <address>
+                {formatAddress().map((line, i) => (i === 0 ? line : <><br />{line}</>))}
+              </address>
+              {
+                contact.mapLink && (
+                  <a href={contact.mapLink} target="_blank" rel="noopener noreferrer">
+                    Get directions
+                  </a>
+                )
+              }
+            </div>
+          </li>
+        </ul>
+
+        <div class="hours-box">
+          <h3><Icon name="clock" size={20} /> Opening hours</h3>
+          <OpeningHours />
+        </div>
+      </div>
+    </div>
+
+    <div class="container map-wrap">
+      <h2 class="visually-hidden">Find us</h2>
+      <MapEmbed />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (min-width: 60em) {
+    .contact {
+      grid-template-columns: 1.4fr 1fr;
+      gap: 3rem;
+    }
+  }
+
+  .contact__form h2 {
+    margin-bottom: 1rem;
+  }
+
+  .methods {
+    display: grid;
+    gap: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .methods li {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .methods li > :global(svg) {
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.6rem;
+    border-radius: 50%;
+    background: var(--color-surface);
+    color: var(--color-primary-text);
+  }
+
+  .methods h3 {
+    font-size: 1rem;
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .hours-box {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+
+  .hours-box h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .map-wrap {
+    margin-top: 3rem;
+  }
+</style>

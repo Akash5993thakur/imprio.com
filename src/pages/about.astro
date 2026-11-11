@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Testimonials from '../components/Testimonials.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Icon from '../components/Icon.astro';
+import { siteConfig } from '../config/site.config';
+
+const { about } = siteConfig;
+const seo = siteConfig.seo.pages.about;
+---
+
+<BaseLayout title={seo.title} description={seo.description}>
+  <PageHeader heading={about.heading} intro={about.intro} />
+
+  <section class="section">
+    <div class="container story">
+      <div class="prose">
+        {about.story.map((p) => <p>{p}</p>)}
+      </div>
+      <img
+        src={about.image.src}
+        alt={about.image.alt}
+        width={about.image.width ?? 1200}
+        height={about.image.height ?? 900}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    {
+      about.highlights.length > 0 && (
+        <div class="container">
+          <ul class="highlights" role="list">
+            {about.highlights.map((h) => (
+              <li>
+                <strong>{h.value}</strong>
+                <span>{h.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </section>
+
+  {
+    about.values.length > 0 && (
+      <section class="section section--surface" aria-labelledby="values-heading">
+        <div class="container">
+          <div class="section-head section-head--center">
+            <h2 id="values-heading">What we stand for</h2>
+          </div>
+          <ul class="grid grid--3 values" role="list">
+            {about.values.map((v) => (
+              <li class="card">
+                <div class="card__body">
+                  <span class="values__icon">
+                    <Icon name="check" />
+                  </span>
+                  <h3>{v.title}</h3>
+                  <p>{v.description}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <Testimonials />
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .story {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .story img {
+    width: 100%;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  @media (min-width: 56em) {
+    .story {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 3.5rem;
+    }
+  }
+
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 1rem;
+    margin-top: 3rem;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+  }
+
+  .highlights li {
+    padding: 1.5rem 1rem;
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+
+  .highlights strong {
+    display: block;
+    font-size: 2rem;
+    line-height: 1.1;
+    color: var(--color-primary-text);
+  }
+
+  .highlights span {
+    color: var(--color-muted);
+  }
+
+  .values {
+    list-style: none;
+    padding: 0;
+  }
+
+  .values__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+</style>

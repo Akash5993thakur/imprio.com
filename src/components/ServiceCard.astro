@@ -1,0 +1,26 @@
+---
+import type { Service } from '../config/site.config';
+
+interface Props {
+  service: Service;
+  headingLevel?: 'h2' | 'h3';
+}
+const { service, headingLevel: Heading = 'h3' } = Astro.props;
+---
+
+<article class="card">
+  <img
+    class="card__img"
+    src={service.image.src}
+    alt={service.image.alt}
+    width={service.image.width ?? 800}
+    height={service.image.height ?? 600}
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="card__body">
+    <Heading>{service.title}</Heading>
+    <p>{service.description}</p>
+    {service.price && <p class="price">{service.price}</p>}
+  </div>
+</article>

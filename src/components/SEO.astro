@@ -1,0 +1,44 @@
+---
+import { siteConfig } from '../config/site.config';
+import { absoluteUrl } from '../lib/utils';
+import { localBusinessSchema } from '../lib/schema';
+
+interface Props {
+  /** Page title. Omit on the home page to use seo.title as-is. */
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description = siteConfig.seo.description, image = siteConfig.seo.ogImage, noindex = false } = Astro.props;
+const fullTitle = title ? `${title} | ${siteConfig.businessName}` : siteConfig.seo.title;
+const canonical = absoluteUrl(Astro.url.pathname);
+const ogImage = absoluteUrl(image);
+const schema = JSON.stringify(localBusinessSchema()).replace(/</g, '\\u003c');
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+{siteConfig.seo.keywords.length > 0 && <meta name="keywords" content={siteConfig.seo.keywords.join(', ')} />}
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex" />}
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={siteConfig.businessName} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={siteConfig.businessName} />
+<meta property="og:locale" content={siteConfig.seo.locale} />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- LocalBusiness structured data -->
+<script type="application/ld+json" set:html={schema} />

@@ -1,0 +1,62 @@
+---
+import { siteConfig } from '../config/site.config';
+import { formatTime } from '../lib/utils';
+
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
+<dl class:list={['hours', { 'hours--compact': compact }]}>
+  {
+    siteConfig.hours.map((h) => (
+      <div class="hours__row">
+        <dt>{h.label}</dt>
+        <dd>
+          {h.closed || !h.opens || !h.closes ? (
+            'Closed'
+          ) : (
+            <>
+              <time datetime={h.opens}>{formatTime(h.opens)}</time> –{' '}
+              <time datetime={h.closes}>{formatTime(h.closes)}</time>
+            </>
+          )}
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .hours__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    padding-block: 0.6rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .hours__row:last-child {
+    border-bottom: 0;
+  }
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  .hours--compact .hours__row {
+    padding-block: 0.25rem;
+    border: 0;
+  }
+
+  .hours--compact dt {
+    font-weight: 400;
+    opacity: 0.85;
+  }
+</style>
