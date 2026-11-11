@@ -19,7 +19,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Open http://localhost:4321. `npm run build` type-checks and builds to `dist/`, and `npm run preview` serves that build. Requires Node 22+.
+Open http://localhost:4321. `npm run build` type-checks and builds to `dist/`, and `npm run preview` serves that build. Requires Node 22.23.4+ (pinned in `.nvmrc`).
 
 ## Pages
 
@@ -84,7 +84,7 @@ With JavaScript, the form submits in the background and shows the result inline.
    - Framework preset: **Astro**
    - Build command: `npm run build`
    - Output directory: `dist`
-4. Under **Settings → Variables and Secrets**, add `PUBLIC_WEB3FORMS_ACCESS_KEY`. Add `NODE_VERSION` = `22` if needed.
+4. Under **Settings → Variables and Secrets**, add `PUBLIC_WEB3FORMS_ACCESS_KEY`. Cloudflare reads `.nvmrc`; if a build fails on the Node version, also add `NODE_VERSION` = `22.23.4`.
 5. Add `imprio.com` under **Custom domains**.
 
 `public/_headers` sets long-lived caching for hashed assets and a few security headers.
